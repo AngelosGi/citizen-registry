@@ -11,7 +11,6 @@
 
     <name>test</name>
     <artifactId>test</artifactId>
-    <version>${revision}</version>
     <description>Test module for the citizen registry project.</description>
 
     <dependencies>

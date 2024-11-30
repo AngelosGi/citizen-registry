@@ -1,4 +1,4 @@
-package io.anggi.citizen.registry;
+package io.anggi.citizen.registry.client;
 
 public class Main {
     public static void main(String[] args) {
