@@ -11,7 +11,6 @@
 
     <name>domain</name>
     <artifactId>domain</artifactId>
-    <version>${revision}</version>
     <description>Module for domain and entity classes in the citizen registry project.</description>
 
     <dependencies>
