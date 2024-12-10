@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
@@ -189,13 +190,14 @@ public class SpringBootClientApplication implements CommandLineRunner {
     }
 
     private LocalDate promptForValidDate(Scanner scanner) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         while (true) {
-            System.out.print("Enter Birth Date (YYYY-MM-DD): ");
+            System.out.print("Enter Birth Date (DD-MM-YYYY): ");
             String dateInput = scanner.nextLine();
             try {
-                return LocalDate.parse(dateInput);
+                return LocalDate.parse(dateInput, formatter);
             } catch (DateTimeParseException e) {
-                System.out.println("Invalid Date. Must be in format YYYY-MM-DD.");
+                System.out.println("Invalid Date. Must be in format DD-MM-YYYY.");
             }
         }
     }
