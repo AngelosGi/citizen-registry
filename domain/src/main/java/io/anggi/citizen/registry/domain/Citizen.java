@@ -6,22 +6,27 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "citizens")
 public class Citizen {
 
     @Id
-    @NotNull
+    @NotNull(message = "Ο Αριθμός Ταυτότητας είναι απαραίτητος.")
     @Size(min = 8, max = 8, message = "Ο αριθμός ταυτότητας (ΑΤ) πρέπει να έχει ακριβώς 8 χαρακτήρες.")
     private String idNumber;
 
-    @NotNull
+    @NotNull (message = "Το Ονομα δεν πρέπει να είναι κενό")
     private String firstName;
 
-    @NotNull
+    @NotNull (message = "Το Επίθετο δεν πρέπει να είναι κενό")
     private String lastName;
 
     @Enumerated(EnumType.STRING)
@@ -34,14 +39,15 @@ public class Citizen {
         OTHER
     }
 
-    @NotNull
-    @Past(message = "Ημερομηνία γέννησης πρέπει να είναι στο παρελθόν.")
+    @NotNull(message = "Η Ημερομηνία γέννησης είναι απαραίτητη.")
+    @Past(message = "Η Ημερομηνία γέννησης πρέπει να είναι στο παρελθόν.")
     private LocalDate birthDate;
 
-    @NotNull
-    @Size(min = 9, max = 9, message = "ΑΦΜ πρέπει να έχει 9 ψηφία.")
+    @NotNull(message = "Το ΑΦΜ δεν πρέπει να είναι κενό.")
+    @Size(min = 9, max = 9, message = "ΑΦΜ πρέπει να έχει ακριβώς 9 ψηφία.")
     private String afm;
 
+    @NotNull(message = "Η Διεύθυνση δεν πρέπει να είναι κενή.")
     private String address;
 
 }
