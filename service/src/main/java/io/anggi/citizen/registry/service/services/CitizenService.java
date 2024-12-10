@@ -28,15 +28,10 @@ public class CitizenService {
     @Transactional
     public Citizen updateCitizen(String idNumber, @Valid Citizen citizenDetails) {
         Citizen existingCitizen = citizenRepository.findById(idNumber)
-                .orElseThrow(() -> new EntityNotFoundException("Citizen with ID " + idNumber + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("O πολίτης με Α.Τ. " + idNumber + " δεν βρέθηκε."));
 
-        // Partial update logic
-        Optional.ofNullable(citizenDetails.getFirstName()).ifPresent(existingCitizen::setFirstName);
-        Optional.ofNullable(citizenDetails.getLastName()).ifPresent(existingCitizen::setLastName);
         Optional.ofNullable(citizenDetails.getAddress()).ifPresent(existingCitizen::setAddress);
         Optional.ofNullable(citizenDetails.getAfm()).ifPresent(existingCitizen::setAfm);
-        Optional.ofNullable(citizenDetails.getGender()).ifPresent(existingCitizen::setGender);
-        Optional.ofNullable(citizenDetails.getBirthDate()).ifPresent(existingCitizen::setBirthDate);
 
         return citizenRepository.save(existingCitizen);
     }
