@@ -20,7 +20,7 @@ public class CitizenService {
     @Transactional
     public Citizen createCitizen(@Valid Citizen citizen) {
         if (citizenRepository.existsById(citizen.getIdNumber())) {
-            throw new IllegalArgumentException("Citizen with ID " + citizen.getIdNumber() + " already exists.");
+            throw new IllegalArgumentException("O πολίτης με Α.Τ. " + citizen.getIdNumber() + " υπάρχει είδη.");
         }
         return citizenRepository.save(citizen);
     }
@@ -65,7 +65,7 @@ public class CitizenService {
     @Transactional
     public void deleteCitizen(String idNumber) {
         if (!citizenRepository.existsById(idNumber)) {
-            throw new EntityNotFoundException("Citizen with ID " + idNumber + " not found");
+            throw new EntityNotFoundException("O πολίτης με Α.Τ. " + idNumber + " δεν βρέθηκε.");
         }
         citizenRepository.deleteById(idNumber);
     }
