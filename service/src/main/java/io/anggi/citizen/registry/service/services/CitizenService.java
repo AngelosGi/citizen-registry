@@ -47,7 +47,24 @@ public class CitizenService {
 
     public Citizen getCitizenById(String idNumber) {
         return citizenRepository.findById(idNumber)
-                .orElseThrow(() -> new EntityNotFoundException("Citizen with ID " + idNumber + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("O πολίτης με Α.Τ. " + idNumber + " δεν βρέθηκε."));
+    }
+
+    public List<Citizen> searchCitizens(String idNumber, String firstName, String lastName, String afm) {
+        // Logic for searching based on input parameters
+        if (idNumber != null && !idNumber.isBlank()) {
+            return citizenRepository.findByIdNumber(idNumber);
+        } else if (firstName != null && lastName != null) {
+            return citizenRepository.findByFirstNameOrLastName(firstName, lastName);
+        } else if (firstName != null) {
+            return citizenRepository.findByFirstName(firstName);
+        } else if (lastName != null) {
+            return citizenRepository.findByLastName(lastName);
+        } else if (afm != null) {
+            return citizenRepository.findByAfm(afm);
+        } else {
+            return citizenRepository.findAll();
+        }
     }
 
     @Transactional
