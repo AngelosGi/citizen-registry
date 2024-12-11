@@ -5,6 +5,7 @@ import io.anggi.citizen.registry.service.repositories.CitizenRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -40,13 +41,15 @@ public class CitizenService {
         return citizenRepository.findAll();
     }
 
-    public Citizen getCitizenById(String idNumber) {
+    public Citizen getCitizenById(@NotBlank String idNumber) {
         return citizenRepository.findById(idNumber)
                 .orElseThrow(() -> new EntityNotFoundException("O πολίτης με Α.Τ. " + idNumber + " δεν βρέθηκε."));
     }
 
-    public List<Citizen> searchCitizens(String idNumber, String firstName, String lastName, String afm) {
-        // Logic for searching based on input parameters
+    public List<Citizen> searchCitizens(String idNumber,
+                                        String firstName,
+                                        String lastName,
+                                        String afm) {
         if (idNumber != null && !idNumber.isBlank()) {
             return citizenRepository.findByIdNumber(idNumber);
         } else if (firstName != null && lastName != null) {
@@ -63,7 +66,7 @@ public class CitizenService {
     }
 
     @Transactional
-    public void deleteCitizen(String idNumber) {
+    public void deleteCitizen(@NotBlank String idNumber) {
         if (!citizenRepository.existsById(idNumber)) {
             throw new EntityNotFoundException("O πολίτης με Α.Τ. " + idNumber + " δεν βρέθηκε.");
         }
