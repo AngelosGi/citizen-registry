@@ -52,6 +52,14 @@
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
+
+<!--		in case we want both Json and XML-->
+<!--		<dependency>-->
+<!--			<groupId>com.fasterxml.jackson.dataformat</groupId>-->
+<!--			<artifactId>jackson-dataformat-xml</artifactId>-->
+<!--		</dependency>-->
+<!--		need to add "consumes = {"application/json", "application/xml"}, produces = {"application/json", "application/xml" to controllers -->
+
 	</dependencies>
 
 	<build>
