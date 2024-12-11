@@ -20,7 +20,11 @@ public class CitizenController {
     private final CitizenService citizenService;
     private final CitizenRepository citizenRepository;
 
-    @PostMapping
+
+    //I tried "consumes = {"application/json", "application/xml"}, produces = {"application/json", "application/xml"} "
+    // but the browser defaults to XML and i couldn't find a way to make Json default.
+
+    @PostMapping(consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<Citizen> createCitizen(@Valid @RequestBody Citizen citizen) {
         Citizen created = citizenService.createCitizen(citizen);
         return ResponseEntity
@@ -28,18 +32,18 @@ public class CitizenController {
                 .body(created);
     }
 
-    @PutMapping("/{idNumber}")
+    @PutMapping(value = "/{idNumber}", consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<Citizen> updateCitizen(
             @PathVariable("idNumber") String idNumber,
             @Valid @RequestBody Citizen citizen) {
         if (citizen.getIdNumber().length() != 8) {
-            throw new IllegalArgumentException("Το Α.Τ. πρέπει να έχει ακριβώς 8 χαρακτήρες.");
+            throw new IllegalArgumentException("O Α.Τ. πρέπει να έχει ακριβώς 8 χαρακτήρες.");
         }
         Citizen updated = citizenService.updateCitizen(idNumber, citizen);
         return ResponseEntity.ok(updated);
     }
 
-    @GetMapping("/search")
+    @GetMapping(value = "/search", produces = {"application/json"})
     public ResponseEntity<List<Citizen>> searchCitizens(
             @RequestParam(required = false) String idNumber,
             @RequestParam(required = false) String firstName,
@@ -58,22 +62,22 @@ public class CitizenController {
         return ResponseEntity.ok(citizens);
     }
 
-    @GetMapping
+    @GetMapping(produces = {"application/json"})
     public ResponseEntity<List<Citizen>> getAllCitizens() {
         List<Citizen> citizens = citizenService.getAllCitizens();
         return ResponseEntity.ok(citizens);
     }
 
-    @GetMapping("/{idNumber}")
+    @GetMapping(value = "/{idNumber}", produces = {"application/json"})
     public ResponseEntity<Citizen> getCitizenById(@PathVariable("idNumber") String idNumber) {
         if (idNumber.length() != 8) {
-            throw new IllegalArgumentException("Το Α.Τ. πρέπει να έχει ακριβώς 8 χαρακτήρες.");
+            throw new IllegalArgumentException("O Α.Τ. πρέπει να έχει ακριβώς 8 χαρακτήρες.");
         }
         Citizen citizen = citizenService.getCitizenById(idNumber);
         return ResponseEntity.ok(citizen);
     }
 
-    @DeleteMapping("/{idNumber}")
+    @DeleteMapping(value = "/{idNumber}", produces = {"application/json"})
     public ResponseEntity<Void> deleteCitizen(@PathVariable("idNumber") String idNumber) {
         if (idNumber.length() != 8) {
             throw new IllegalArgumentException("Το Α.Τ. πρέπει να έχει ακριβώς 8 χαρακτήρες.");
@@ -82,3 +86,4 @@ public class CitizenController {
         return ResponseEntity.noContent().build();
     }
 }
+
