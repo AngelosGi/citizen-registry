@@ -44,7 +44,7 @@ public class Citizen {
     private LocalDate birthDate;
 
     @NotNull(message = "Το ΑΦΜ δεν πρέπει να είναι κενό.")
-    @Size(min = 9, max = 9, message = "ΑΦΜ πρέπει να έχει ακριβώς 9 ψηφία.")
+    @Size(min = 9, max = 9, message = "Ο ΑΦΜ πρέπει να έχει ακριβώς 9 ψηφία.")
     private String afm;
 
     @NotNull(message = "Η Διεύθυνση δεν πρέπει να είναι κενή.")
