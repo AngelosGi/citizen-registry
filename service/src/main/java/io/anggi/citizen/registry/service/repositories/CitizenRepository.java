@@ -14,6 +14,7 @@ public interface CitizenRepository extends JpaRepository<Citizen, String>, JpaSp
     List<Citizen> findByFirstName(String firstName);
     List<Citizen> findByLastName(String lastName);
     List<Citizen> findByFirstNameOrLastName(String firstName, String lastName);
+    List<Citizen> findByFirstNameAndLastName(String firstName, String lastName);
     List<Citizen> findByAfm(String afm);
 
 }

@@ -46,19 +46,17 @@ public class CitizenService {
                 .orElseThrow(() -> new EntityNotFoundException("O πολίτης με Α.Τ. " + idNumber + " δεν βρέθηκε."));
     }
 
-    public List<Citizen> searchCitizens(String idNumber,
-                                        String firstName,
-                                        String lastName,
-                                        String afm) {
+    @Transactional
+    public List<Citizen> searchCitizens(String idNumber, String firstName, String lastName, String afm) {
         if (idNumber != null && !idNumber.isBlank()) {
             return citizenRepository.findByIdNumber(idNumber);
-        } else if (firstName != null && lastName != null) {
-            return citizenRepository.findByFirstNameOrLastName(firstName, lastName);
-        } else if (firstName != null) {
+        } else if (firstName != null && !firstName.isBlank() && lastName != null && !lastName.isBlank()) {
+            return citizenRepository.findByFirstNameAndLastName(firstName, lastName);
+        } else if (firstName != null && !firstName.isBlank()) {
             return citizenRepository.findByFirstName(firstName);
-        } else if (lastName != null) {
+        } else if (lastName != null && !lastName.isBlank()) {
             return citizenRepository.findByLastName(lastName);
-        } else if (afm != null) {
+        } else if (afm != null && !afm.isBlank()) {
             return citizenRepository.findByAfm(afm);
         } else {
             return citizenRepository.findAll();
