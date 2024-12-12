@@ -3,76 +3,87 @@ package io.anggi.citizen.registry.service;
 import io.anggi.citizen.registry.domain.Citizen;
 import io.anggi.citizen.registry.service.repositories.CitizenRepository;
 import io.anggi.citizen.registry.service.services.CitizenService;
+import io.anggi.citizen.registry.utils.CitizenUtility;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.time.LocalDate;
-import java.util.Optional;
+
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class CitizenServiceTest {
+
+// with CitizenUtility for creating reusable Citizen instances.
+public class CitizenServiceTest {
 
     @Mock
-    private CitizenRepository citizenRepository; // Mocked repository
+    private CitizenRepository citizenRepository;
 
     @InjectMocks
-    private CitizenService citizenService; // Service under test
+    private CitizenService citizenService;
 
+    private Validator validator; // Validator for testing Bean Validation constraints.
+
+    // Initialize ValidatorFactory and Validator before each test.
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this); // Initialize mocks
+        try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
+            validator = factory.getValidator(); // Initialize the validator
+        }
+    }
+
+
+    // Test case to validate a correct Citizen entity.
+    @Test
+    void testValidCitizen() {
+        Citizen validCitizen = CitizenUtility.createValidCitizen(); // Generate a valid Citizen.
+        Set<ConstraintViolation<Citizen>> violations = validator.validate(validCitizen); // Validate constraints.
+        assertTrue(violations.isEmpty(), "Citizen should be valid."); // Assert no violations.
+    }
+
+    // Test case to validate an incorrect Citizen entity.
+    @Test
+    void testInvalidCitizen() {
+        Citizen invalidCitizen = CitizenUtility.createInvalidCitizen(); // Generate an invalid Citizen.
+        Set<ConstraintViolation<Citizen>> violations = validator.validate(invalidCitizen); // Validate constraints.
+        assertFalse(violations.isEmpty(), "Citizen should have validation errors."); // Assert violations exist.
+    }
+
+    // Test case to validate a Citizen entity with optional fields only.
+    @Test
+    void testCitizenWithOptionalFields() {
+        Citizen partialCitizen = CitizenUtility.createCitizenWithOptionalFields(); // Generate partial Citizen.
+        Set<ConstraintViolation<Citizen>> violations = validator.validate(partialCitizen); // Validate constraints.
+        assertTrue(violations.isEmpty(), "Citizen with optional fields only should be valid."); // Assert no violations.
+    }
+
+
+    @Test
+    void testSearchByIdNumber() {
+        String idNumber = "AB123456";
+        when(citizenRepository.findByIdNumber(idNumber)).thenReturn(List.of(new Citizen()));
+        List<Citizen> result = citizenService.searchCitizens(idNumber, null, null, null);
+        assertEquals(1, result.size());
+        verify(citizenRepository, times(1)).findByIdNumber(idNumber);
     }
 
     @Test
-    void testCreateCitizen() {
-        // Arrange: Create a valid Citizen object and mock repository behavior
-        Citizen citizen = new Citizen("12345678", "John", "Doe", Citizen.Gender.MALE,
-                LocalDate.of(1990, 1, 1), "123456789", "123 Main Street");
-
-        when(citizenRepository.save(citizen)).thenReturn(citizen);
-
-        // Act: Call the service method
-        Citizen createdCitizen = citizenService.createCitizen(citizen);
-
-        // Assert: Verify the behavior and result
-        assertNotNull(createdCitizen, "Citizen should not be null.");
-        assertEquals("John", createdCitizen.getFirstName(), "First name should match.");
-
-        verify(citizenRepository, times(1)).save(citizen); // Verify repository interaction
-    }
-
-    @Test
-    void testGetCitizenById() {
-        // Arrange: Mock repository behavior
-        Citizen citizen = new Citizen("12345678", "John", "Doe", Citizen.Gender.MALE,
-                LocalDate.of(1990, 1, 1), "123456789", "123 Main Street");
-
-        when(citizenRepository.findById("12345678")).thenReturn(Optional.of(citizen));
-
-        // Act: Call the service method
-        Citizen foundCitizen = citizenService.getCitizenById("12345678");
-
-        // Assert: Verify the result
-        assertNotNull(foundCitizen, "Citizen should not be null.");
-        assertEquals("John", foundCitizen.getFirstName(), "First name should match.");
-
-        verify(citizenRepository, times(1)).findById("12345678"); // Verify repository interaction
-    }
-
-    @Test
-    void testDeleteCitizen() {
-        // Arrange: Mock repository behavior
-        when(citizenRepository.existsById("12345678")).thenReturn(true);
-
-        // Act: Call the service method
-        citizenService.deleteCitizen("12345678");
-
-        // Assert: Verify repository interaction
-        verify(citizenRepository, times(1)).deleteById("12345678");
+    void testSearchByFirstNameAndLastName() {
+        String firstName = "Γιάννης";
+        String lastName = "Γεωργίου";
+        when(citizenRepository.findByFirstNameAndLastName(firstName, lastName)).thenReturn(List.of(new Citizen()));
+        List<Citizen> result = citizenService.searchCitizens(null, firstName, lastName, null);
+        assertEquals(1, result.size());
+        verify(citizenRepository, times(1)).findByFirstNameAndLastName(firstName, lastName);
     }
 }
