@@ -46,6 +46,7 @@ public class Citizen {
 
     @NotNull(message = "Το ΑΦΜ δεν πρέπει να είναι κενό.")
     @Size(min = 9, max = 9, message = "Ο ΑΦΜ πρέπει να έχει ακριβώς 9 ψηφία.")
+    @Pattern(regexp = "\\d{9}", message = "Ο ΑΦΜ πρέπει να περιέχει μόνο αριθμούς.")
     private String afm;
 
     @NotNull(message = "Η Διεύθυνση δεν πρέπει να είναι κενή.")
