@@ -1,5 +1,5 @@
 name: Continuous Integration and Merge Workflow
-run-name: Commit ${{ github.sha }} of branch ${{ github.ref }} by @${{ github.actor }}
+run-name: Commit ${{ github.sha }} of branch ${{ github.ref_name }} by @${{ github.actor }}
 
 on:
   push:
@@ -41,10 +41,11 @@ jobs:
         with:
           java-version: 21
           distribution: temurin
-          
+          cache: maven
+
       - name: Grant execute permission to Maven Wrapper
         run: chmod +x mvnw
-        
+
       - name: Run Unit Tests
         run: ./mvnw test
 
@@ -61,10 +62,11 @@ jobs:
         with:
           java-version: 21
           distribution: temurin
-          
+          cache: maven
+
       - name: Grant execute permission to Maven Wrapper
         run: chmod +x mvnw
-        
+
       - name: Run Integration Tests
         run: ./mvnw verify
 
