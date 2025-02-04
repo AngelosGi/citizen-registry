@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DataJpaTest // Annotation for JPA repository testing.
 @ContextConfiguration(classes = io.anggi.citizen.registry.service.ServiceApplication.class)
 @ActiveProfiles("test") // Use the test profile
-public class CitizenRepositoryIT {
+public class CitizenRepositoryTest {
 
     @Autowired
     private CitizenRepository citizenRepository; // Repository being tested.
