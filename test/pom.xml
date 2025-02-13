@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.anggi.citizen.registry</groupId>
         <artifactId>citizen-registry</artifactId>
-        <version>${revision}</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <name>test</name>
@@ -17,13 +17,11 @@
         <dependency>
             <groupId>io.anggi.citizen.registry</groupId>
             <artifactId>domain</artifactId>
-            <version>${revision}</version>
         </dependency>
 
         <dependency>
             <groupId>io.anggi.citizen.registry</groupId>
             <artifactId>service</artifactId>
-            <version>${revision}</version>
         </dependency>
 
         <dependency>
