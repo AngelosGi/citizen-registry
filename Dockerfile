@@ -54,6 +54,7 @@ USER citizen
 EXPOSE 8080
 
 # Optionally define environment variables for DB, etc, NO need as it takes the defaults from the application.properties
+
 #ENV DB_HOST=localhost \
 #    DB_PORT=5432 \
 #    DB_USER=postgres \
