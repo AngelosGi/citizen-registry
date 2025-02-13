@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>io.anggi.citizen.registry</groupId>
 		<artifactId>citizen-registry</artifactId>
-		<version>${revision}</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<name>service</name>
@@ -17,7 +17,6 @@
 		<dependency>
 			<groupId>io.anggi.citizen.registry</groupId>
 			<artifactId>domain</artifactId>
-			<version>${revision}</version>
 		</dependency>
 
 		<dependency>
@@ -32,11 +31,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -67,6 +68,17 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<classifier>exec</classifier>
+					<mainClass>io.anggi.citizen.registry.service.ServiceApplication</mainClass>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal> <!-- Creates executable JAR -->
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

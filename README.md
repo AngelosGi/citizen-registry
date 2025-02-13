@@ -1,6 +1,8 @@
 # Citizen Registry RESTful Service (WIP)
 
-This project implements a **Citizen Registry RESTful service** using **Spring Boot**. The service allows for the management of citizen records, supporting **CRUD** operations such as **create**, **update**, **delete**, and **search**. The service will also provide a future-proof foundation for **CI/CD automation** and **cloud deployments** using tools like **Jenkins**, **GitHub Actions**, and **Terraform**.
+This project implements a **Citizen Registry RESTful service** using **Spring Boot**. The service allows for the management of citizen records, supporting **CRUD** operations such as **create**, **update**, **delete**, and **search**. The service will also provide a future-proof foundation for **CI/CD automation** and **cloud deployments** using tools like **GitHub Actions**, **Terraform**, and **Jenkins**.
+
+---
 
 ## Project Overview
 
@@ -15,6 +17,7 @@ The Citizen Registry is designed to manage citizen records with the following at
 - **Residential Address**: Mandatory.
 
 ### Features
+
 - **Create Citizens**: Add new citizen records.
 - **Update Citizens**: Modify existing records.
 - **Delete Citizens**: Remove a citizen by ID.
@@ -24,7 +27,7 @@ The Citizen Registry is designed to manage citizen records with the following at
 
 ---
 
-### Project Structure / Directory Layout
+## Project Structure / Directory Layout
 
 The project is structured as a **multi-module Maven project**:
 
@@ -33,13 +36,18 @@ The project is structured as a **multi-module Maven project**:
 - **`citizen-registry-test`**: Contains all test classes (unit, integration, and exception handling
 - **`citizen-registry-client`**: Provides a CLI for interacting with the API, simulating user input.
 
-```
+```plaintext
 citizen-registry/ (parent)
-├── pom.xml
+├── client/
+│   └── pom.xml
 ├── domain/
+│   └── pom.xml
 ├── service/
+│   └── pom.xml
 ├── test/
-├── client/ 
+│   └── pom.xml
+├── README.md
+└── pom.xml
 ```
 
 ---
@@ -55,17 +63,21 @@ citizen-registry/ (parent)
 - **Rest-Assured**: Integration testing for RESTful APIs.
 - **Swagger/OpenAPI**: Interactive API documentation.
 - **Lombok**: Reduces boilerplate code.
-
+- **GitHub Actions**: For CI/CD automation.
+- **Terraform**: For infrastructure provisioning. **(Future)**
+  
 ---
 
 ## API Endpoints
 
 ### Base URL
+
 `http://localhost:8080/api/citizens`
 
 ### Endpoints
 
 1. **Create a Citizen**
+
    - **Method**: `POST`
    - **Request**:
      ```json
@@ -87,21 +99,25 @@ citizen-registry/ (parent)
      ```
 
 2. **Retrieve a Citizen by ID**
+
    - **Method**: `GET`
    - **URL**: `/api/citizens/{id}`
 
 3. **Update a Citizen**
+
    - **Method**: `PUT`
    - **Request Body**: Similar to `POST`.
 
 4. **Delete a Citizen**
+
    - **Method**: `DELETE`
    - **URL**: `/api/citizens/{id}`
 
 5. **Search Citizens**
+
    - **Method**: `GET`
    - **Query Parameters**:
-      - `firstName`, `lastName`, `idNumber`, `afm`
+     - `firstName`, `lastName`, `idNumber`, `afm`
    - **Example**:
      `GET /api/citizens?firstName=Γιάννης&lastName=Ντο`
 
@@ -115,7 +131,7 @@ Custom exception handling ensures user-friendly responses:
 - **EntityNotFoundException**: For missing records.
 - **IllegalArgumentException**: For invalid arguments.
 - **MethodArgumentNotValidException**: For request body validation failures.
-- **Generic Exception Handler**: Catches any unforeseen exceptions.
+- **Generic Exception Handler**: Catches unforeseen exceptions.
 
 ---
 
@@ -129,7 +145,7 @@ Custom exception handling ensures user-friendly responses:
 
 2. **Integration Tests**
    - Verify database interactions.
-   - ~~Test RESTful endpoints.~~ WIP
+   - Test RESTful endpoints using **Rest-Assured**. (WIP)
 
 3. **Exception Tests**
    - Validate exception handling and responses.
@@ -139,18 +155,48 @@ Custom exception handling ensures user-friendly responses:
 - **Entity Tests**: Ensures field-level validation.
 - **Service Tests**: Validates service layer logic.
 - **Repository Tests**: Tests CRUD operations.
-- ~~**Controller Tests**: Ensures endpoint behavior.~~ WIP
+- **Controller Tests**: Ensures endpoint behavior. (WIP)
+
+---
+
+## CI/CD Integration with GitHub Actions
+
+### CI/CD Workflow Overview
+
+The project includes a **GitHub Actions pipeline** to automate the testing and merging process. The workflow:
+
+1. **Builds and Tests the Code**:
+   - Runs unit and integration tests on every push to `feature/*` or `fix/*` branches.
+2. **Manages Branches**:
+   - Automatically merges changes into the `develop` branch after successful tests.
+3. **Uploads Test Reports**:
+   - Provides artifacts for debugging and review.
+
+### Workflow Configuration
+
+The pipeline is defined in `.github/workflows/pipeline.yml`. Key steps include:
+
+- **Build and Package**:
+  - Uses `mvn clean package` to compile the project.
+- **Unit Tests**:
+  - Executes `mvn test` to validate business logic.
+- **Integration Tests**:
+  - Executes `mvn verify` to test the interaction between components.
+- **Merge Process**:
+  - Automatically merges feature or fix branches into `develop` upon successful completion of tests.
 
 ---
 
 ## Development Setup
 
 ### Prerequisites
-- Java 21
-- Maven 3.9+
-- IDE, I used IntelliJ IDEA
+
+- **Java 21**
+- **Maven 3.9+**
+- **IDE**
 
 ### Steps
+
 1. Clone the repository:
    ```bash
    git clone https://github.com/AngelosGi/citizen-registry.git
@@ -164,31 +210,25 @@ Custom exception handling ensures user-friendly responses:
    mvn clean install
    ```
 4. Run the application:
-
+   ```bash
+   mvn spring-boot:run
+   ```
 
 ---
-## Future Plans
 
-### CI/CD Integration
+## Future Enhancements
 
-Future enhancements include automating the build, test, and deployment processes via **Continuous Integration (CI)** and **Continuous Delivery (CD)** pipelines. The planned technologies for this automation are:
+### Cloud Deployment
 
-2. **GitHub Actions**: For lightweight CI/CD workflows that will automate testing, linting, and Docker builds.
-3. **Terraform**: To automate infrastructure provisioning in **AWS** or **Azure**, allowing for cloud deployments and scaling.
-   later i will try **Jenkins**
+- Use **Terraform** to provision infrastructure in **AWS** or **Azure**:
+  - **App Services**: For hosting the API.
+  - **Database Resources**: For citizen records.
+  - **Networking**: Load balancers, security groups, etc.
 
-These technologies will help ensure faster development cycles, reduce manual intervention, and make deployments more reliable and consistent.
+### Advanced Testing
 
-### Cloud Infrastructure
+- Improve test coverage.
+- Add end-to-end tests for a complete testing pipeline.
 
-The service will be deployed in the cloud (likely **AWS** or **Azure**), and I plan to use **Terraform** for infrastructure management. Terraform will define resources such as:
+---
 
-- **App Services**: For hosting the API.
-- **Virtual Machines**: If needed
-- **Databases**: For storing citizen records.
-- **Load Balancers, Networking etc**: For high availability and scalability.
-
-### Automated Testing and Quality Assurance
-
-- **Unit Testing**: Using **JUnit 5** for service layer logic.
-- **Integration Testing**: Using **Rest-Assured** to verify the interaction between the API and the database.
