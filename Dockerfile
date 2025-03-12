@@ -1,8 +1,3 @@
-#
-# Dockerfile for the Citizen Registry REST Service
-# Fine-grained layered build approach (like the book) with parent installation
-#
-
 #############################
 # Stage 1: Build the Maven Project
 #############################
@@ -53,12 +48,11 @@ COPY --from=builder --chown=citizen:citizen /app/service-registry/target/service
 USER citizen
 EXPOSE 8080
 
-# Optionally define environment variables for DB, etc, NO need as it takes the defaults from the application.properties
-
+# Optionally define environment variables for DB, etc, NO need as it takes the defaults from the application.properties for development
 #ENV DB_HOST=localhost \
 #    DB_PORT=5432 \
-#    DB_USER=postgres \
-#    DB_PASSWORD=pass123 \
-#    DB_NAME=citizens
+#    DB_USER=postgres_d \
+#    DB_PASSWORD=pass123_d \
+#    DB_NAME=citizens_db_d
 
 CMD ["java", "-jar", "app.jar"]

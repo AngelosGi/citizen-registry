@@ -15,7 +15,7 @@ variable "instance_type_db" {
 variable "db_user" {
   description = "Username for the PostgreSQL database"
   type        = string
-  default     = "appuser"
+  default     = "postgres"
 }
 
 variable "db_name" {
